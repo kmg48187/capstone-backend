@@ -5,7 +5,7 @@ CREATE TABLE users(
     id serial PRIMARY KEY,
     email text NOT NULL UNIQUE,
     username text NOT NULL UNIQUE,
-    password text NOT NULL UNIQUE,
+    password text NOT NULL,
     stories_array array,
     likes_array array
 );
