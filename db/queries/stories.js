@@ -4,19 +4,19 @@ export async function createStory({
     title,
     genre,
     body_text,
-    likes,
-    upload_date,
+    //likes,
+   // upload_date,
 }){
     const sql = `
     INSERT INTO stories 
-        (title, genre, body_text, likes, upload_date)
+        (title, genre, body_text)
     VALUES
-        ($1, $2, $3, $4, $5)
+        ($1, $2, $3)
     RETURNING *
     `;
     const{
         rows: {story}
-    } = await db.query(sql, [title, genre, body_text, likes, upload_date]);
+    } = await db.query(sql, [title, genre, body_text]);
     return story;
 };
 
@@ -44,21 +44,19 @@ export async function getStoryById(id){
 };
 
 //They need to update when they want to edit a chapter
-export async function updateStory(id, title, genre, body_text, likes, upload_date){
+export async function updateStory(id, title, genre, body_text){
     const sql=`
     UPDATE stories
     SET
        title = $2,
        genre = $3,
        body_text = $4,
-       likes = $5,
-       upload_date = $6,
        WHERE id = $1 
        RETURNING *
        `;
        const {
         rows: [story],
-       } = await db.query(sql, [id, title, genre, body_text, likes, upload_date]);
+       } = await db.query(sql, [id, title, genre, body_text]);
     return story;
 };
 

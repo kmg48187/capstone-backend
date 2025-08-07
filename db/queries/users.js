@@ -1,18 +1,18 @@
 import db from "#db/client";
 import bcrypt from "bcrypt"
 
-export async function createUser(email, username, password, stories_array, likes_array) {
+export async function createUser(email, username, password /*stories_array, likes_array*/) {
     const sql =`
         INSERT INTO users
-            (email, username, password, stories_array, likes_array)
+            (email, username, password)
         VALUES
-            ($1, $2, $3, $4, $5)
+            ($1, $2, $3)
         RETURNING *
         `;
         const hashedPassword = await bcrypt.hash(password, 10);
         const {
             rows: [user],
-        } = await db.query(sql, [email, username, hashedPassword, stories_array, likes_array]);
+        } = await db.query(sql, [email, username, hashedPassword]);
         return user;
 };
 
@@ -45,21 +45,19 @@ export async function getUserById(id) {
 }
 
 
-export async function updateUser(id, email, username, password, stories_array, likes_array){
+export async function updateUser(id, email, username, password){
     const sql=`
     UPDATE users
     SET
        email = $2,
        username = $3,
        password = $4,
-       stories_array = $5,
-       likes_array = $6,
        WHERE id = $1 
        RETURNING *
        `;
        const {
         rows: [user],
-       } = await db.query(sql, [id, email, username, password, stories_array, likes_array]);
+       } = await db.query(sql, [id, email, username, password]);
     return user;
 };
 
